@@ -2,6 +2,13 @@ package singleflight
 
 import "sync"
 
+// ----------
+// 一个 key 正在向其他节点、源获取数据，加锁阻塞其他相同的请求，
+// 等待请求结果，防止其他节点、源压力猛增被击穿
+//
+// 相当于一个请求的缓存器，不具有存储功能，
+// 所以请求结束后，会删除 g.m 映射关系中的 key
+
 // 正在进行中，或已经结束的请求
 type call struct {
 	wg  sync.WaitGroup
